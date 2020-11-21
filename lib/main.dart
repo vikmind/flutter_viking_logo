@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Vikings Logo'),
     );
   }
 }
@@ -80,17 +80,35 @@ class LogoPainter extends CustomPainter {
     print(size);
     final lightPaint = Paint()..color = LIGHT_BLUE;
     final darkPaint = Paint()..color = DARK_BLUE;
+    /// Left Stripe
+    /// m392.09 163.01
+    /// l186.31 186.32
+    /// l-514.76 514.76
+    /// c-23.32 23.32 -63.18 6.8 -63.18 -26.17
+    /// v-318.46
+    /// c0 -9.82 3.9 -19.23 10.84 -26.17
+    /// l330.28 -330.28
+    /// c13.95 -13.94 36.56 -13.94 50.51 0
     Path leftStripe = parseSvgPath(
         "m392.09 163.01 186.31 186.32-514.76 514.76c-23.32 23.32-63.18 6.8-63.18-26.17v-318.46c0-9.82 3.9-19.23 10.84-26.17l330.28-330.28c13.95-13.94 36.56-13.94 50.51 0z");
-    leftStripe = scaleDown(leftStripe, size);
 
+    /// Right stripe
+    /// m340.67 163.93
+    /// l-185.4 185.4
+    /// l514.76 514.76
+    /// c23.32 23.32 63.18 6.8 63.18 -26.17
+    /// v-318.46
+    /// c0 -9.82 -3.9 -19.23 -10.84 -26.17
+    /// l-329.36 -329.36
+    /// c-14.46 -14.46 -37.89 -14.46 -52.34 0
     Path rightStripe = parseSvgPath(
         "m340.67 163.93-185.4 185.4 514.76 514.76c23.32 23.32 63.18 6.8 63.18-26.17v-318.46c0-9.82-3.9-19.23-10.84-26.17l-329.36-329.36c-14.46-14.46-37.89-14.46-52.34 0z");
-    rightStripe = scaleDown(rightStripe, size);
 
+    /// Gradient
+    /// m366.84 560.89
+    /// l-211.57 -211.56
+    /// l 134.13 289
     Path gradient = parseSvgPath("m366.84 560.89-211.57-211.56 134.13 289z");
-    gradient = scaleDown(gradient, size);
-    print(gradient.getBounds());
 
     final gradientColor =
         HSLColor.fromColor(Color(0xFF055799)).withLightness(.25);
@@ -132,7 +150,6 @@ class LogoPainter extends CustomPainter {
       603.9 - 14.77 + 108.35-93.58,
       1.38 + 243.66 + 111.08-354.74,
     );
-    rightHorn = scaleDown(rightHorn, size);
 
     /// Right base
     /// m129.66.38
@@ -140,7 +157,6 @@ class LogoPainter extends CustomPainter {
     /// c0 0 -86.5 48.26 -108.35 111.08
     /// c0 0 -126.1 -169.51 93.58-354.74
     Path rightBase = Path();
-    rightBase = scaleDown(rightBase, size);
 
     /// Left horn
     /// m661.55 420.26
@@ -149,7 +165,6 @@ class LogoPainter extends CustomPainter {
     /// s-54.9 28.28 -54.9 28.28
     /// s111.98 70.1 145.24 146.17
     Path leftHorn = Path();
-    leftHorn = scaleDown(leftHorn, size);
 
 
     /// Left base
@@ -159,24 +174,9 @@ class LogoPainter extends CustomPainter {
     /// s54.9 28.28 54.9 28.28
     /// s-111.98 70.1-145.24 146.17
     Path leftBase = Path();
-    leftBase = scaleDown(leftBase, size);
 
-    canvas.drawPath(leftStripe, darkPaint);
-    canvas.drawPath(rightStripe, lightPaint);
-    canvas.drawPath(gradient, gradientPaint);
-    canvas.drawPath(rightHorn, lightPaint);
-    // canvas.drawPath(leftHorn, darkPaint);
-    // canvas.drawPath(rightBase, darkPaint);
-    // canvas.drawPath(leftBase, lightPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-Path scaleDown(Path path, Size size) => path.transform(
+    canvas.translate(121*(size.width/WIDTH), 23*(size.width/WIDTH));
+    canvas.transform(
       Float64List.fromList([
         1,
         0,
@@ -195,4 +195,18 @@ Path scaleDown(Path path, Size size) => path.transform(
         0,
         1 / (size.width / WIDTH),
       ]),
-    );
+);
+    canvas.drawPath(leftStripe, darkPaint);
+    canvas.drawPath(rightStripe, lightPaint);
+    canvas.drawPath(gradient, gradientPaint);
+    canvas.drawPath(rightHorn, lightPaint);
+    canvas.drawPath(leftHorn, darkPaint);
+    canvas.drawPath(rightBase, darkPaint);
+    canvas.drawPath(leftBase, lightPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
